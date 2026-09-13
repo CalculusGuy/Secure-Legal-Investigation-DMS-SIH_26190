@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+{% block title %}New version — {{ parent.title }}{% endblock %}
+
+{% block content %}
+<div class="card narrow">
+  <h1>Upload New Version</h1>
+  <p class="muted">
+    Parent document: <strong>{{ parent.title }}</strong> (v{{ parent.version }})
+  </p>
+
+  <form method="post" enctype="multipart/form-data" class="form">
+    <label>
+      Change note
+      <textarea name="note" rows="3" placeholder="What changed in this version?"></textarea>
+    </label>
+
+    <label>
+      File
+      <input type="file" name="file" required>
+    </label>
+
+    <button class="btn btn-primary" type="submit">Upload v{{ parent.version + 1 }}</button>
+    <a class="btn btn-ghost" href="{{ url_for('documents.view', doc_id=parent.id) }}">Cancel</a>
+  </form>
+</div>
+{% endblock %}

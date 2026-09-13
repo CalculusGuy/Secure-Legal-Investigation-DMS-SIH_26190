@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+{% block title %}Cases{% endblock %}
+
+{% block content %}
+<div class="card">
+  <div class="card-head">
+    <h1>Cases</h1>
+    <a class="btn btn-primary" href="{{ url_for('cases.new') }}">New case</a>
+  </div>
+
+  {% if cases %}
+  <table class="table">
+    <thead>
+      <tr><th>Case #</th><th>Title</th><th>Status</th><th>Documents</th><th>Created</th><th></th></tr>
+    </thead>
+    <tbody>
+      {% for c in cases %}
+      <tr>
+        <td><strong>{{ c.case_number }}</strong></td>
+        <td>{{ c.title }}</td>
+        <td><span class="pill pill-{{ c.status|lower }}">{{ c.status }}</span></td>
+        <td>{{ c.documents | length }}</td>
+        <td>{{ c.created_at.strftime('%Y-%m-%d') }}</td>
+        <td><a class="link" href="{{ url_for('cases.detail', case_id=c.id) }}">Open</a></td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+  {% else %}
+  <p class="muted">No cases yet. Create the first one.</p>
+  {% endif %}
+</div>
+{% endblock %}

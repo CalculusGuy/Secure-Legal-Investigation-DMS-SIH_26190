@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+{% block title %}Search{% endblock %}
+
+{% block content %}
+<div class="card">
+  <h1>Search Documents</h1>
+  <p class="muted">Search by title, description, case number, uploader, or SHA-256 hash.</p>
+
+  <form method="get" class="form-inline">
+    <input type="text" name="q" value="{{ query }}" placeholder="Type to search…" autofocus>
+    <button class="btn btn-primary" type="submit">Search</button>
+  </form>
+
+  {% if query %}
+    <h3>{{ results | length }} result(s) for "{{ query }}"</h3>
+    {% if results %}
+    <table class="table">
+      <thead>
+        <tr><th>Title</th><th>Case</th><th>Uploader</th><th>Uploaded</th><th>SHA-256</th><th></th></tr>
+      </thead>
+      <tbody>
+        {% for d in results %}
+        <tr>
+          <td>{{ d.title }}</td>
+          <td>{{ d.case.case_number if d.case else '—' }}</td>
+          <td>{{ d.uploader.username if d.uploader else '—' }}</td>
+          <td>{{ d.created_at.strftime('%Y-%m-%d') }}</td>
+          <td class="mono small">{{ d.sha256_hash[:16] }}…</td>
+          <td><a class="link" href="{{ url_for('documents.view', doc_id=d.id) }}">View</a></td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+    {% else %}
+    <p class="muted">No documents matched your query.</p>
+    {% endif %}
+  {% endif %}
+</div>
+{% endblock %}

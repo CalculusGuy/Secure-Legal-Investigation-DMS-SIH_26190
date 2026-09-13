@@ -1,0 +1,58 @@
+{% extends "base.html" %}
+{% block title %}{{ doc.title }}{% endblock %}
+
+{% block content %}
+<div class="card">
+  <h1>{{ doc.title }}</h1>
+  <p class="muted">{{ doc.description or 'No description.' }}</p>
+
+  <div class="kv">
+    <div><span class="k">Document ID</span><span class="v">#{{ doc.id }}</span></div>
+    <div><span class="k">Version</span><span class="v">v{{ doc.version }}</span></div>
+    <div><span class="k">Case</span><span class="v">{{ doc.case.case_number if doc.case else '—' }}</span></div>
+    <div><span class="k">Uploaded by</span><span class="v">{{ doc.uploader.username if doc.uploader else '—' }}</span></div>
+    <div><span class="k">Size</span><span class="v">{{ doc.original_size }} bytes</span></div>
+    <div><span class="k">Uploaded at</span><span class="v">{{ doc.created_at.strftime('%Y-%m-%d %H:%M:%S') }} UTC</span></div>
+  </div>
+
+  <div class="hashbox">
+    <div class="k">SHA-256</div>
+    <code class="hash">{{ doc.sha256_hash }}</code>
+  </div>
+
+  <div class="hashbox">
+    <div class="k">Ed25519 signature</div>
+    <code class="hash small">{{ doc.signature }}</code>
+  </div>
+
+  {% if doc.parent_id %}
+  <div class="hashbox">
+    <div class="k">Supersedes</div>
+    <a class="link" href="{{ url_for('documents.view', doc_id=doc.parent_id) }}">← previous version</a>
+  </div>
+  {% endif %}
+
+  {% if children %}
+  <div class="hashbox">
+    <div class="k">Later versions</div>
+    <ul class="list">
+      {% for c in children %}
+      <li>
+        <a href="{{ url_for('documents.view', doc_id=c.id) }}">v{{ c.version }}</a>
+        <span class="muted small">{{ c.created_at.strftime('%Y-%m-%d %H:%M') }}</span>
+      </li>
+      {% endfor %}
+    </ul>
+  </div>
+  {% endif %}
+
+  <div class="actions">
+    <a class="btn btn-primary" href="{{ url_for('documents.download', doc_id=doc.id) }}">Download</a>
+    <a class="btn btn-ghost" href="{{ url_for('documents.verify_doc', doc_id=doc.id) }}">Verify integrity</a>
+    {% if current_user.can_upload() %}
+    <a class="btn btn-ghost" href="{{ url_for('documents.new_version', doc_id=doc.id) }}">Upload new version</a>
+    {% endif %}
+    <a class="btn btn-ghost" href="{{ url_for('documents.dashboard') }}">Back</a>
+  </div>
+</div>
+{% endblock %}

@@ -1,0 +1,62 @@
+{% extends "base.html" %}
+{% block title %}Dashboard{% endblock %}
+
+{% block content %}
+<section class="ledger-banner {% if ledger_status.intact %}ledger-ok{% else %}ledger-bad{% endif %}">
+  {% if ledger_status.intact %}
+    ✅ Audit ledger intact — {{ ledger_status.entries }} entries verified
+  {% else %}
+    ⚠️ AUDIT LEDGER COMPROMISED — {{ ledger_status.problems | length }} problem(s) detected
+  {% endif %}
+</section>
+
+<div class="grid-2">
+  <div class="card">
+    <div class="card-head">
+      <h2>Recent Documents</h2>
+      <a class="btn btn-primary" href="{{ url_for('documents.upload') }}">Upload</a>
+    </div>
+    {% if documents %}
+    <table class="table">
+      <thead>
+        <tr><th>Title</th><th>Case</th><th>Version</th><th>Uploaded</th><th></th></tr>
+      </thead>
+      <tbody>
+        {% for d in documents %}
+        <tr>
+          <td>{{ d.title }}</td>
+          <td>{{ d.case.case_number if d.case else '—' }}</td>
+          <td>v{{ d.version }}</td>
+          <td>{{ d.created_at.strftime('%Y-%m-%d %H:%M') }}</td>
+          <td><a class="link" href="{{ url_for('documents.view', doc_id=d.id) }}">View</a></td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+    {% else %}
+    <p class="muted">No documents yet. Upload the first one.</p>
+    {% endif %}
+  </div>
+
+  <div class="card">
+    <div class="card-head">
+      <h2>Recent Cases</h2>
+      <a class="btn btn-ghost" href="{{ url_for('cases.new') }}">New case</a>
+    </div>
+    {% if cases %}
+    <ul class="list">
+      {% for c in cases %}
+      <li>
+        <a href="{{ url_for('cases.detail', case_id=c.id) }}">
+          <strong>{{ c.case_number }}</strong> — {{ c.title }}
+        </a>
+        <span class="muted small">{{ c.documents | length }} doc(s) · {{ c.status }}</span>
+      </li>
+      {% endfor %}
+    </ul>
+    {% else %}
+    <p class="muted">No cases yet.</p>
+    {% endif %}
+  </div>
+</div>
+{% endblock %}

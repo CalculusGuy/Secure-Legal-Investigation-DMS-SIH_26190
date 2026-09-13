@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+{% block title %}Upload{% endblock %}
+
+{% block content %}
+<div class="card narrow">
+  <h1>Upload Document</h1>
+  <p class="muted">
+    The document will be hashed (SHA-256), signed with your personal Ed25519 key,
+    encrypted with AES-256-GCM, and logged to the tamper-evident audit chain.
+  </p>
+
+  <form method="post" enctype="multipart/form-data" class="form">
+    <label>
+      Title
+      <input type="text" name="title" required>
+    </label>
+
+    <label>
+      Case (optional)
+      <select name="case_id">
+        <option value="">— none —</option>
+        {% for c in cases %}
+        <option value="{{ c.id }}">{{ c.case_number }} — {{ c.title }}</option>
+        {% endfor %}
+      </select>
+    </label>
+
+    <label>
+      Description (optional)
+      <textarea name="description" rows="3"></textarea>
+    </label>
+
+    <label>
+      File
+      <input type="file" name="file" required>
+    </label>
+
+    <button class="btn btn-primary" type="submit">Encrypt &amp; Seal</button>
+    <a class="btn btn-ghost" href="{{ url_for('documents.dashboard') }}">Cancel</a>
+  </form>
+</div>
+{% endblock %}

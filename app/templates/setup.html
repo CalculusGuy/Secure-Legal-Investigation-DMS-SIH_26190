@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+{% block title %}Initial Setup{% endblock %}
+
+{% block content %}
+<div class="auth-card">
+  <h1>Initial Setup</h1>
+  <p class="muted">Create the first administrator account for this deployment.</p>
+
+  <form method="post" class="form">
+    <label>
+      Full name
+      <input type="text" name="full_name" required autofocus>
+    </label>
+    <label>
+      Username
+      <input type="text" name="username" required>
+    </label>
+    <label>
+      Password
+      <input type="password" name="password" required minlength="6">
+    </label>
+    <button class="btn btn-primary" type="submit">Create admin</button>
+  </form>
+</div>
+{% endblock %}

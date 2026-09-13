@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+{% block title %}{{ case.case_number }}{% endblock %}
+
+{% block content %}
+<div class="card">
+  <h1>{{ case.case_number }}</h1>
+  <h2 class="muted">{{ case.title }}</h2>
+  <p>{{ case.description or '' }}</p>
+  <p class="muted small">Status: <span class="pill pill-{{ case.status|lower }}">{{ case.status }}</span></p>
+
+  <h3>Documents in this case</h3>
+  {% if documents %}
+  <table class="table">
+    <thead>
+      <tr><th>Title</th><th>Version</th><th>Uploaded</th><th></th></tr>
+    </thead>
+    <tbody>
+      {% for d in documents %}
+      <tr>
+        <td>{{ d.title }}</td>
+        <td>v{{ d.version }}</td>
+        <td>{{ d.created_at.strftime('%Y-%m-%d %H:%M') }}</td>
+        <td><a class="link" href="{{ url_for('documents.view', doc_id=d.id) }}">View</a></td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+  {% else %}
+  <p class="muted">No documents attached yet.</p>
+  {% endif %}
+
+  <div class="actions">
+    <a class="btn btn-ghost" href="{{ url_for('cases.list_cases') }}">Back to cases</a>
+  </div>
+</div>
+{% endblock %}

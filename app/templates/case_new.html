@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+{% block title %}New Case{% endblock %}
+
+{% block content %}
+<div class="card narrow">
+  <h1>New Case</h1>
+
+  <form method="post" class="form">
+    <label>
+      Case number
+      <input type="text" name="case_number" required placeholder="e.g. FIR-2026-0142">
+    </label>
+    <label>
+      Title
+      <input type="text" name="title" required>
+    </label>
+    <label>
+      Description
+      <textarea name="description" rows="4"></textarea>
+    </label>
+    <button class="btn btn-primary" type="submit">Create case</button>
+    <a class="btn btn-ghost" href="{{ url_for('cases.list_cases') }}">Cancel</a>
+  </form>
+</div>
+{% endblock %}

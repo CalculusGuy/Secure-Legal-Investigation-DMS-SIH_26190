@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+{% block title %}Verify — {{ doc.title }}{% endblock %}
+
+{% block content %}
+<div class="card narrow">
+  <h1>Integrity Report</h1>
+  <p class="muted">Document: <strong>{{ doc.title }}</strong></p>
+
+  <div class="check {% if result.hash_ok %}check-ok{% else %}check-bad{% endif %}">
+    {% if result.hash_ok %}✅{% else %}❌{% endif %}
+    SHA-256 hash match
+  </div>
+
+  <div class="check {% if result.signature_ok %}check-ok{% else %}check-bad{% endif %}">
+    {% if result.signature_ok %}✅{% else %}❌{% endif %}
+    Ed25519 signature valid
+  </div>
+
+  {% if result.notes %}
+  <div class="notes">
+    <h3>Notes</h3>
+    <ul>
+      {% for n in result.notes %}<li>{{ n }}</li>{% endfor %}
+    </ul>
+  </div>
+  {% endif %}
+
+  <div class="actions">
+    <a class="btn btn-ghost" href="{{ url_for('documents.view', doc_id=doc.id) }}">Back to document</a>
+    <a class="btn btn-ghost" href="{{ url_for('audit.index') }}">Open audit ledger</a>
+  </div>
+</div>
+{% endblock %}

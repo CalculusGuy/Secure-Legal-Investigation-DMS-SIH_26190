@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+{% block title %}Audit Ledger{% endblock %}
+
+{% block content %}
+<div class="ledger-banner {% if status.intact %}ledger-ok{% else %}ledger-bad{% endif %}">
+  {% if status.intact %}
+    ✅ Chain intact — {{ status.entries }} entries verified
+  {% else %}
+    ⚠️ TAMPERING DETECTED — {{ status.problems | length }} problem(s)
+    <ul>{% for p in status.problems %}<li>{{ p }}</li>{% endfor %}</ul>
+  {% endif %}
+</div>
+
+<div class="card">
+  <h1>Audit Ledger</h1>
+  <p class="muted">Append-only hash-chained log. Every entry references the hash of the previous one.</p>
+
+  <table class="table">
+    <thead>
+      <tr>
+        <th>#</th><th>Timestamp</th><th>Actor</th><th>Event</th><th>Payload</th><th>Hash</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for e in entries %}
+      <tr>
+        <td>{{ e.index }}</td>
+        <td class="mono small">{{ e.timestamp }}</td>
+        <td>{{ e.actor }}</td>
+        <td><span class="pill pill-event">{{ e.event_type }}</span></td>
+        <td class="mono small">{{ e.payload | tojson }}</td>
+        <td class="mono small">{{ e.hash[:16] }}…</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+{% endblock %}
