@@ -165,15 +165,19 @@ git clone https://github.com/CalculusGuy/Secure-Legal-Investigation-DMS-SIH_2619
 cd Secure-Legal-Investigation-DMS-SIH_26190
 
 python -m venv .venv
+```
 
 # Windows
+```
 .venv\Scripts\activate.bat
-
+```
 # Linux/macOS
+```
 source .venv/bin/activate
-
-pip install -r requirements.txt
+```
+```pip install -r requirements.txt
 python run.py
+```
 Open http://127.0.0.1:5000
 
 First launch -> Setup -> Create Admin
