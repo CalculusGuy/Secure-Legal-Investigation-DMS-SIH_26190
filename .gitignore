@@ -1,0 +1,12 @@
+.venv/
+__pycache__/
+*.pyc
+*.pyo
+instance/
+storage/encrypted/
+storage/keys/
+.pip-cache/
+.tmp/
+.vscode/
+.idea/
+*.log
