@@ -1,0 +1,47 @@
+{% extends "base.html" %}
+{% block title %}Users{% endblock %}
+
+{% block content %}
+<div class="grid-2">
+  <div class="card">
+    <h1>Users</h1>
+    {% if users %}
+    <table class="table">
+      <thead>
+        <tr><th>Username</th><th>Full name</th><th>Role</th><th>Created</th></tr>
+      </thead>
+      <tbody>
+        {% for u in users %}
+        <tr>
+          <td>{{ u.username }}</td>
+          <td>{{ u.full_name }}</td>
+          <td><span class="role role-{{ u.role }}">{{ u.role }}</span></td>
+          <td>{{ u.created_at.strftime('%Y-%m-%d') }}</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+    {% else %}
+    <p class="muted">No users.</p>
+    {% endif %}
+  </div>
+
+  <div class="card">
+    <h2>Add user</h2>
+    <form method="post" action="{{ url_for('admin.create_user') }}" class="form">
+      <label>Full name<input type="text" name="full_name" required></label>
+      <label>Username<input type="text" name="username" required></label>
+      <label>Password<input type="password" name="password" required minlength="6"></label>
+      <label>
+        Role
+        <select name="role">
+          <option value="viewer">viewer</option>
+          <option value="investigator">investigator</option>
+          <option value="admin">admin</option>
+        </select>
+      </label>
+      <button class="btn btn-primary" type="submit">Create user</button>
+    </form>
+  </div>
+</div>
+{% endblock %}
